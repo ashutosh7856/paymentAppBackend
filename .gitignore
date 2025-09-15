@@ -1,1 +1,111 @@
+# ----------------------------
+# Node / Package managers
+# ----------------------------
+node_modules/
+
+# npm / yarn / pnpm lock files (ignore if you intentionally commit one)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+.pnp/
+.pnp.js
+
+# npm debug logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# ----------------------------
+# Next.js
+# ----------------------------
+.next/
+out/
+/.vercel
+/.vercel/output
+.next/cache/
+.next/standalone/
+
+# Next.js build trace
+.next/BUILD_ID
+
+# ----------------------------
+# TypeScript
+# ----------------------------
+*.tsbuildinfo
+
+# ----------------------------
+# Environment variables & secrets
+# ----------------------------
+.env
+.env.*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+secrets/
+*.pem
+*.key
+
+# ----------------------------
+# Build outputs
+# ----------------------------
+dist/
+build/
+public/build/
+
+# ----------------------------
+# Caches & coverage
+# ----------------------------
+.cache/
+.parcel-cache/
+.turbo/
+coverage/
+coverage-final.json
+
+# ----------------------------
+# Logs
+# ----------------------------
+logs
+*.log
+npm-debug.log*
+
+# ----------------------------
+# Editor / IDE
+# ----------------------------
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# JetBrains Rider
+.idea/
+
+# ----------------------------
+# OS files
+# ----------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Shell history
+.bash_history
+.zsh_history
+
+# ----------------------------
+# Database / miscellaneous
+# ----------------------------
+*.sqlite
+*.sqlite3
+*.db
+*.sql
+dump.rdb
+
+# ----------------------------
+# Miscellaneous
+# ----------------------------
+# Storybook
+.out-storybook/
+.storybook/build/
+
+# End of file
 node_modules
