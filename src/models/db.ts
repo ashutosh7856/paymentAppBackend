@@ -12,11 +12,10 @@ mongoose.connect(dbUrl)
 
 
 const userSchema = new schema({
-  firstName:{type:String, require:true},
-  lastName:{type:String, require:true},
-  userName:{type:String, require:true},
-  password:String
-
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  userName: { type: String, required: true, unique: true },
+  password: { type: String, required: true }
 })
 
 

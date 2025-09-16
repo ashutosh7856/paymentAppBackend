@@ -7,17 +7,20 @@ import { User } from "../models/db.js"
 
 
 export async function createUser(req:Request, res:Response){
-    const {success} = signupSchema.safeParse(req.body)
+    const validation = signupSchema.safeParse(req.body)
 
-    if(!success){
+    if(!validation.success){
         return res.status(411).json({
-            message:'Incorrect Input'
+            message:'Incorrect Input',
+            errors: validation.error.issues
         })
     }
 
+    const userData = validation.data
+
 
     const user = await User.findOne({
-        userName:req.body.userName
+        userName: userData.userName
     })
 
     if(user?._id){
@@ -26,10 +29,14 @@ export async function createUser(req:Request, res:Response){
         })
     }
 
+  
+    const saltRounds = 10
+    const hashedPassword = await bcrypt.hash(userData.password, saltRounds)
 
-    const dbUser = await User.create(
-        req.body
-    )
+    const dbUser = await User.create({
+        ...userData,
+        password: hashedPassword
+    })
 
     const userId = dbUser._id
 
@@ -52,21 +59,32 @@ export async function createUser(req:Request, res:Response){
 
 
 export async function signIn(req:Request, res:Response){
-    const {success} = signinSchema.safeParse(req.body)
+    const validation = signinSchema.safeParse(req.body)
 
-    if(!success){
-        return res.json({
-            message:'Invalid Input'
+    if(!validation.success){
+        return res.status(411).json({
+            message:'Invalid Input',
+            errors: validation.error.issues
         })
     }
 
+    const { userName, password } = validation.data
+
     const user = await User.findOne({
-        userName:req.body.userName
+        userName: userName
     })
 
-    if(!user?._id){
-        return res.json({
+    if(!user?._id || !user.password){
+        return res.status(401).json({
             message:"No user found with the username"
+        })
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password)
+    
+    if(!isPasswordValid){
+        return res.status(401).json({
+            message:"Invalid password"
         })
     }
 
@@ -109,4 +127,29 @@ export async function updateUser(req:Request, res:Response){
     res.json({
         message:'User updated successfully.'
     })
+}
+
+
+
+export async function findUsers(req:Request, res:Response){
+    const keyword = req.params.keyword
+    if(!keyword) return res.json({message:'no param to find'})
+        
+    const users = await User.find({
+        $or:[
+            {firstName: new RegExp(keyword, "i")},
+            {lastName: new RegExp(keyword, "i")}
+        ]
+    })
+
+   if(!users){
+    return res.json({
+        message:'No users found'
+    })
+   }
+
+   res.json({
+    message:'Users found',
+    users
+   })
 }

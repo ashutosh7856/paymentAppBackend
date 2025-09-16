@@ -1,23 +1,23 @@
-import zod, { string } from 'zod'
+import { z } from 'zod'
 
-export const signupSchema = zod.object({
-    userName:string(),
-    firstName:string(),
-    lastName:string(),
-    password:string().min(8)
+export const signupSchema = z.object({
+    userName: z.string().min(1, "Username is required"),
+    firstName: z.string().min(1, "First name is required"),
+    lastName: z.string().min(1, "Last name is required"),
+    password: z.string().min(8, "Password must be at least 8 characters")
 })
 
-export const signinSchema = zod.object({
-    userName:string(),
-    password:string().min(2)
+export const signinSchema = z.object({
+    userName: z.string().min(1, "Username is required"),
+    password: z.string().min(8, "Password must be at least 8 characters")
 })
 
-export const updateUserSchema = zod.object({
-    password:string(),
-    firstName:string().optional(),
-    lastName:string().optional(),
-    userName:string().optional()
+export const updateUserSchema = z.object({
+    password: z.string().optional(),
+    firstName: z.string().optional(),
+    lastName: z.string().optional(),
+    userName: z.string().optional()
 })
 
-export type  signUpType = zod.infer<typeof signupSchema>
-export type signInType = zod.infer<typeof signinSchema>
+export type signUpType = z.infer<typeof signupSchema>
+export type signInType = z.infer<typeof signinSchema>
