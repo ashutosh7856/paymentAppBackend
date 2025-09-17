@@ -12,14 +12,23 @@ mongoose.connect(dbUrl)
 
 
 const userSchema = new schema({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-  userName: { type: String, required: true, unique: true },
-  password: { type: String, required: true }
+  firstName: { type: String, required: true, trim:true },
+  lastName: { type: String, required: true, trim:true },
+  userName: { type: String, required: true, unique: true, trim:true },
+  password: { type: String, required: true, trim:true }
 })
 
 
+const accountSchema = new schema({
+  userId:{type:objectId, ref:'User', required:true},
+  amount:{type:Number, required: true}
+})
+
 const User = mongoose.model('User', userSchema)
+const Account = mongoose.model('Account', accountSchema)
 
 
-export {User}
+export {
+  User,
+  Account
+}

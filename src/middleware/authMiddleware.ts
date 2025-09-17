@@ -15,14 +15,25 @@ export async function authMiddleware(req:Request, res:Response, next:NextFunctio
 
     if(!JWT_SECRET)  return res.status(500).json({message:'secret not found'})
 
-    const verfiedId = jwt.verify(authHeader, JWT_SECRET)
+    const token = authHeader.split(' ',)[1]
+    try{
 
-    if (typeof verfiedId === 'string') {
-        return res.status(403).json({ message: 'Invalid token format' })
+
+        const decoded = jwt.verify(token as string, JWT_SECRET as string)
+
+        if((decoded as any).userId){
+
+            req.userId = (decoded as any).userId
+            next()
+        }else{
+            res.status(403).json({message:'Filed to decode'})
+        }
+
+
+
+    }catch(err){
+        res.status(403).json({message:'userId does not match'})
     }
 
-    req.userId = (verfiedId as any).userId
-
-    next()
 
 }

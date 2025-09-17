@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import {JWT_SECRET} from '../config/config.js'
 import { signupSchema, signinSchema, type signInType, type signUpType, updateUserSchema } from "../schemas/userSchema.js"
-import { User } from "../models/db.js"
+import { Account, User } from "../models/db.js"
 
 
 export async function createUser(req:Request, res:Response){
@@ -39,6 +39,12 @@ export async function createUser(req:Request, res:Response){
     })
 
     const userId = dbUser._id
+
+    await Account.create({
+        userId:userId,
+        amount:Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000
+
+    })
 
     if(!JWT_SECRET) return res.status(500).json({message:'secret not found'})
 
@@ -132,8 +138,7 @@ export async function updateUser(req:Request, res:Response){
 
 
 export async function findUsers(req:Request, res:Response){
-    const keyword = req.params.keyword
-    if(!keyword) return res.json({message:'no param to find'})
+    const keyword = req.params.filter || ''
         
     const users = await User.find({
         $or:[
@@ -150,6 +155,11 @@ export async function findUsers(req:Request, res:Response){
 
    res.json({
     message:'Users found',
-    users
+    user:users.map(u => ({
+        firstName:u.firstName,
+        lastName:u.lastName,
+        userName:u.userName,
+        _id:u._id
+    }))
    })
 }
