@@ -56,7 +56,9 @@ export async function createUser(req:Request, res:Response){
 
     res.status(200).json({
         message:'User Created Successfully',
-        token:token
+        token:token,
+        firstName:userData.firstName,
+        lastName:userData.lastName
     })
 
 
@@ -105,7 +107,9 @@ export async function signIn(req:Request, res:Response){
 
     res.status(200).json({
         message:'Logged in succesfully',
-        token:token
+        token:token,
+        firstName:user.firstName,
+        lastName:user.lastName
     })
 
 }
@@ -138,7 +142,7 @@ export async function updateUser(req:Request, res:Response){
 
 
 export async function findUsers(req:Request, res:Response){
-    const keyword = req.params.filter || ''
+    const keyword = req.params.filter as string || ''
         
     const users = await User.find({
         $or:[
@@ -155,7 +159,7 @@ export async function findUsers(req:Request, res:Response){
 
    res.json({
     message:'Users found',
-    user:users.map(u => ({
+    user:users.filter(u=>u._id.toString() != req.userId).map(u => ({
         firstName:u.firstName,
         lastName:u.lastName,
         userName:u.userName,
