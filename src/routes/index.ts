@@ -8,6 +8,7 @@ const router = Router()
 
 router.use('/user', userRouter)
 router.use('/account', accountRouter)
+router.use('/chat')
 
 
 
